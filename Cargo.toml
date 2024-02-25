@@ -1,0 +1,25 @@
+[package]
+name = "qb"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = { version = "1.0.79", features = ["backtrace"] }
+atty = "0.2.14"
+console-subscriber = "0.2.0"
+dotenv = "0.15.0"
+futures = "0.3.30"
+pin-project = "1.1.4"
+qbit-api-rs = "0.2.0"
+serde = { version = "1.0.197", features = ["derive"] }
+serde_json = "1.0.114"
+shutdown-handler = "0.1.1"
+sled = { version = "0.34.7", features = ["docs", "color-backtrace", "event_log", "backtrace", "compression", "io_uring"] }
+thiserror = "1.0.57"
+time = { version = "0.3.34", features = ["macros", "formatting"] }
+tokio = { version = "1.36.0", features = ["full"] }
+tracing = "0.1.40"
+tracing-rolling = "0.3.0"
+tracing-subscriber = "0.3.18"
