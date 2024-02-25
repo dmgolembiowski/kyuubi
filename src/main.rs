@@ -8,7 +8,7 @@ use std::net::SocketAddr;
 use std::{os::fd::RawFd, sync::Arc};
 use tokio::{
     io::{AsyncBufReadExt, AsyncWriteExt, BufReader},
-    net::TcpListener,
+    net::{TcpListener, UnixListener, UnixSocket, UnixStream},
     pin,
     sync::{broadcast, Mutex},
     time::Duration,
@@ -68,7 +68,7 @@ pub(crate) enum JobKind {
 async fn kyuubi_socket_daemon() {
     info!("Spawning the kyuubi socket daemon");
     let listener = TcpListener::bind("0.0.0.0:8081").await.unwrap();
-
+    // let listener = UnixListener::bind("kyuubi.socket").unwrap();
     let (tx, rx) = broadcast::channel::<(Job, SocketAddr)>(10);
     loop {
         let (mut socket, client_addr) = listener.accept().await.unwrap();
@@ -158,7 +158,6 @@ impl Kyuubi {
                 }
             };
         }
-        warn!("Unreachable scope region encountered. Strange behavior found.");
     }
     pub async fn auth_login(&mut self) -> Result<(), ClientError> {
         debug!("Attempting login.");
