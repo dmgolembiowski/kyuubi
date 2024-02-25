@@ -11,6 +11,7 @@ atty = "0.2.14"
 console-subscriber = "0.2.0"
 dotenv = "0.15.0"
 futures = "0.3.30"
+notify = { version = "6", features = ["serde"]}
 pin-project = "1.1.4"
 qbit-api-rs = "0.2.0"
 serde = { version = "1.0.197", features = ["derive"] }
@@ -20,6 +21,7 @@ sled = { version = "0.34.7", features = ["docs", "color-backtrace", "event_log",
 thiserror = "1.0.57"
 time = { version = "0.3.34", features = ["macros", "formatting"] }
 tokio = { version = "1.36.0", features = ["full"] }
+tokio-stream = { version = "0.1.14", features = ["full"] }
 tracing = "0.1.40"
 tracing-rolling = "0.3.0"
 tracing-subscriber = "0.3.18"
