@@ -1,0 +1,79 @@
+version: '3.2'
+volumes:
+  ssd:
+  hdd:
+services:
+  gluetun:
+    image: qmcgaw/gluetun
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 5076:5076
+      - 6881:6881
+      - 6881:6881/udp
+      - 7878:7878
+      - 8080:8080
+      - 8787:8787
+      - 8686:8686
+      - 8989:8989
+      - 8989:8989/udp
+      - 9117:9117
+      - 9117:9117/udp
+      - 56868:56868
+      - 58686:58686
+      - 58261:58261
+      - 58261:58261/udp
+    environment:
+      - SERVER_REGIONS=""
+      - VPN_ENDPOINT_PORT=0
+      - VPN_SERVICE_PROVIDER=""
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY=""
+      - WIREGUARD_ADDRESSES=""
+      - WIREGUARD_PRESHARED_KEY=""
+    restart: on-failure
+
+
+  kyuubi:
+    image: docker.io/library/kyuubi:latest  
+    container_name: kyuubi
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - type: bind
+        source: ./hdd 
+        target: /hdd
+      - type: bind
+        source: ./ssd 
+        target: /ssd
+    restart: on-failure
+    network_mode: service:gluetun
+    depends_on:
+      - gluetun
+      - qbittorrent
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+      - WEBUI_PORT=8080
+    volumes:
+      - ./config:/config
+      - ./downloads:/downloads
+      - type: bind
+        source: ./hdd 
+        target: /hdd
+      - type: bind
+        source: ./ssd 
+        target: /ssd
+    restart: on-failure
+    network_mode: service:gluetun
+    depends_on:
+      - gluetun
+
